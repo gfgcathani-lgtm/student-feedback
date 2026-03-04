@@ -49,6 +49,12 @@
     .page-container{overflow:hidden;}
     .page-slider{display:flex;transition:transform .5s cubic-bezier(.4,0,.2,1);}
     .page{min-width:100%;flex-shrink:0;}
+    /* allow fade on mobile instead of sliding */
+    @media(max-width:600px){
+      .page-slider{transition:none;display:block;}
+      .page{min-width:100%;position:absolute;top:0;left:0;width:100%;opacity:0;transition:opacity .3s;display:none;}
+      .page.active{display:block;opacity:1;}
+    }
 
     .wrap{max-width:700px;margin:0 auto;padding:22px 15px 70px;}
 
@@ -485,6 +491,20 @@ function deptOptions(placeholder) {
 // ════════════════════════════════════════════
 //  Course selected → show subject section
 // ════════════════════════════════════════════
+let currentPage = 0; // 0 = first page, 1 = second page
+
+function goToPage(pageIndex) {
+  currentPage = pageIndex;
+  if (window.innerWidth <= 600) {
+    // mobile: show/hide with fade
+    document.querySelectorAll('.page').forEach((p, i) => {
+      p.classList.toggle('active', i === pageIndex);
+    });
+  } else {
+    document.getElementById('slider').style.transform = `translateX(-${pageIndex * 100}%)`;
+  }
+}
+
 function onCourse() {
   selCourse = document.querySelector('input[name="course"]:checked')?.value || null;
   if (!selCourse) return;
@@ -583,6 +603,11 @@ function updatePg1Prog() {
 document.getElementById('form').addEventListener('input',  updatePg1Prog);
 document.getElementById('form').addEventListener('change', updatePg1Prog);
 
+// initialize page visibility on load (especially mobile)
+window.addEventListener('load', () => {
+  if (window.innerWidth <= 600) goToPage(0);
+});
+
 // if semester changes after course selected, rebuild rows with new compulsory count
 document.getElementById('sem').addEventListener('change', () => {
   if (selCourse) onCourse();
@@ -637,8 +662,8 @@ function proceed() {
   // Build page 2 content
   buildPage2();
 
-  // ── Slide ──
-  document.getElementById('slider').style.transform = 'translateX(-100%)';
+  // ── Slide or show depending on device ──
+  goToPage(1);
   document.getElementById('sc3').classList.add('active');
   document.getElementById('sl3').classList.add('active');
   document.getElementById('ln23').classList.add('done');
@@ -647,7 +672,7 @@ function proceed() {
 }
 
 function goBack() {
-  document.getElementById('slider').style.transform = 'translateX(0)';
+  goToPage(0);
   document.getElementById('sc3').classList.remove('active','done');
   document.getElementById('sl3').classList.remove('active','done');
   document.getElementById('ln23').classList.remove('done');
