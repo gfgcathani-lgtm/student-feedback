@@ -822,14 +822,14 @@ function validatePg2() {
 // ════════════════════════════════════════════
 //  Submit
 // ════════════════════════════════════════════
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwRwLyWW3dV8fDuNRU4GQflpW1mrinnw4Rohmrg5Tibay9Td0r5GB9fS77m5W-0fhAHUw/exec';
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRwLyWW3dV8fDuNRU4GQflpW1mrinnw4Rohmrg5Tibay9Td0r5GB9fS77m5W-0fhAHUw/exec";
 
 document.getElementById('form').addEventListener('submit', async function(e) {
 
   e.preventDefault();
 
   if (!validatePg2()) {
-    document.querySelector('.qe.show')?.scrollIntoView({behavior:"smooth"});
+    document.querySelector('.qe.show')?.scrollIntoView({behavior:'smooth'});
     return;
   }
 
@@ -887,30 +887,20 @@ document.getElementById('form').addEventListener('submit', async function(e) {
 
   try {
 
-    const response = await fetch(APPS_SCRIPT_URL, {
+    const formData = new FormData();
+    formData.append("data", JSON.stringify(payload));
+
+    await fetch(APPS_SCRIPT_URL, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
+      body: formData
     });
 
-    const result = await response.json();
+    msg.className = "ok";
+    msg.textContent = "Thank you! Your feedback has been submitted.";
 
-    if(result.status === "success"){
+    document.getElementById("form").reset();
 
-      msg.className = "ok";
-      msg.textContent = "Feedback submitted successfully.";
-
-      document.getElementById("form").reset();
-
-    } else {
-
-      throw new Error(result.message);
-
-    }
-
-  } catch(err){
+  } catch (err) {
 
     msg.className = "err";
     msg.textContent = "Submission failed. Please try again.";
