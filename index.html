@@ -51,6 +51,7 @@
     .page{min-width:100%;flex-shrink:0;}
     /* allow fade on mobile instead of sliding */
     @media(max-width:600px){
+      .page-container{position:relative;} /* ensure absolute pages stay below header */
       .page-slider{transition:none;display:block;}
       .page{min-width:100%;position:absolute;top:0;left:0;width:100%;opacity:0;transition:opacity .3s;display:none;}
       .page.active{display:block;opacity:1;}
@@ -496,9 +497,19 @@ let currentPage = 0; // 0 = first page, 1 = second page
 function goToPage(pageIndex) {
   currentPage = pageIndex;
   if (window.innerWidth <= 600) {
-    // mobile: show/hide with fade
-    document.querySelectorAll('.page').forEach((p, i) => {
-      p.classList.toggle('active', i === pageIndex);
+    // mobile: fade between pages manually
+    const pages = Array.from(document.querySelectorAll('.page'));
+    pages.forEach((p, i) => {
+      if (i === pageIndex) {
+        p.style.display = 'block';
+        // ensure starting opacity is 0 for in animation
+        p.style.opacity = 0;
+        requestAnimationFrame(() => { p.style.opacity = 1; });
+      } else {
+        // fade out then hide
+        p.style.opacity = 0;
+        setTimeout(() => { p.style.display = 'none'; }, 300);
+      }
     });
   } else {
     document.getElementById('slider').style.transform = `translateX(-${pageIndex * 100}%)`;
