@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Feedback – Govt. First Grade College, Athani</title>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --navy:#0d1f3c; --deep:#112244; --gold:#c9a84c; --gold2:#e8c96a;
+      --bg:#f0ebe0; --card:#ffffff; --border:#d4c5a0; --muted:#8a9bb5;
+      --red:#c0392b; --green:#1a7a4a; --shadow:0 4px 20px rgba(13,31,60,.09);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--navy);min-height:100vh;overflow-x:hidden;}
+
+    /* ── HEADER ── */
+    .header{background:linear-gradient(135deg,#0d1f3c 0%,#1a3a6e 60%,#0d1f3c 100%);padding:28px 20px 22px;text-align:center;position:relative;overflow:hidden;}
+    .emblem{width:62px;height:62px;margin:0 auto 11px;}
+    .emblem img{width:100%;height:100%;border-radius:50%;object-fit:cover;}
+    .emblem{width:62px;height:62px;border-radius:50%;margin:0 auto 11px;display:flex;align-items:center;justify-content:center;}
+    .emblem img{width:100%;height:100%;border-radius:50%;object-fit:cover;}
+    .header::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(201,168,76,.04) 40px,rgba(201,168,76,.04) 41px);}
+    .emblem{width:62px;height:62px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:50%;margin:0 auto 11px;display:flex;align-items:center;justify-content:center;font-size:27px;box-shadow:0 0 0 4px rgba(201,168,76,.25),0 8px 24px rgba(0,0,0,.3);position:relative;z-index:1;}
+    .header h1{font-family:'EB Garamond',serif;color:var(--gold2);font-size:clamp(14px,4vw,20px);font-weight:700;position:relative;z-index:1;line-height:1.3;}
+    .header p{color:rgba(255,255,255,.5);font-size:12px;margin-top:3px;position:relative;z-index:1;}
+    .hbadge{display:inline-block;margin-top:7px;padding:3px 14px;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.4);border-radius:20px;color:var(--gold2);font-size:9px;letter-spacing:2px;text-transform:uppercase;position:relative;z-index:1;}
+
+    /* ── STEPPER ── */
+    .stepper{background:var(--deep);padding:12px 20px;display:flex;align-items:center;justify-content:center;}
+    .sc{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;border:2px solid rgba(255,255,255,.15);color:rgba(255,255,255,.3);transition:all .4s;flex-shrink:0;}
+    .sc.active{background:var(--gold);border-color:var(--gold);color:var(--navy);}
+    .sc.done{background:#1a7a4a;border-color:#1a7a4a;color:#fff;}
+    .sl{font-size:10px;color:rgba(255,255,255,.3);margin-left:6px;white-space:nowrap;transition:color .4s;}
+    .sl.active{color:var(--gold2);}
+    .sl.done{color:#4ade80;}
+    .sline{width:28px;height:2px;background:rgba(255,255,255,.08);margin:0 5px;flex-shrink:0;transition:background .4s;}
+    .sline.done{background:rgba(26,122,74,.5);}
+    @media(max-width:460px){.sl{display:none;}.sline{width:16px;}}
+
+    /* ── PROGRESS ── */
+    .prog{background:#0a1628;padding:6px 20px;display:flex;align-items:center;gap:10px;}
+    .prog-out{flex:1;height:4px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;}
+    .prog-in{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:2px;transition:width .5s ease;width:0%;}
+    .prog-lbl{color:var(--gold2);font-size:10px;min-width:30px;}
+
+    /* ── PAGE SLIDER ── */
+    .page-container{overflow:hidden;}
+    .page-slider{display:flex;transition:transform .5s cubic-bezier(.4,0,.2,1);}
+    .page{min-width:100%;flex-shrink:0;}
+
+    .wrap{max-width:700px;margin:0 auto;padding:22px 15px 70px;}
+
+    /* ── CARDS ── */
+    .card{background:var(--card);border-radius:14px;border:1px solid var(--border);padding:20px 20px 16px;margin-bottom:16px;box-shadow:var(--shadow);}
+    .card-head{font-family:'EB Garamond',serif;font-size:16px;font-weight:700;color:var(--deep);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--gold);display:flex;align-items:center;gap:7px;}
+
+    /* ── FIELDS ── */
+    .fg{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+    @media(max-width:480px){.fg{grid-template-columns:1fr}}
+    .f{display:flex;flex-direction:column;gap:4px;}
+    .f label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);}
+    .f label .r{color:var(--red);}
+    .f input,.f select,.f textarea{padding:9px 11px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--navy);background:var(--bg);outline:none;transition:border-color .2s,box-shadow .2s;appearance:none;}
+    .f input:focus,.f select:focus,.f textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.14);background:#fff;}
+    .f select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a9bb5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;cursor:pointer;}
+    .f textarea{resize:vertical;min-height:65px;}
+    .f .em{font-size:10px;color:var(--red);display:none;}
+    .f.inv input,.f.inv select{border-color:var(--red);}
+    .f.inv .em{display:block;}
+
+    /* ── COURSE PILLS ── */
+    .course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+    @media(max-width:420px){.course-grid{grid-template-columns:repeat(2,1fr);}}
+    .cp{position:relative;}
+    .cp input[type=radio]{position:absolute;opacity:0;width:0;height:0;}
+    .cp label{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 8px;border-radius:10px;border:2px solid var(--border);background:var(--bg);cursor:pointer;transition:all .2s;text-align:center;min-height:68px;}
+    .cp label .cpn{font-size:15px;font-weight:800;color:var(--muted);line-height:1;transition:color .2s;}
+    .cp label .cpf{font-size:9px;color:var(--muted);margin-top:4px;line-height:1.3;transition:color .2s;}
+    .cp input:checked+label{border-color:var(--gold);background:linear-gradient(135deg,#fffbf0,#fdf6e3);}
+    .cp input:checked+label .cpn{color:var(--navy);}
+    .cp input:checked+label .cpf{color:#7a6a3a;}
+    .cp label:hover{border-color:var(--gold);background:#fdf6e3;}
+    .crs-err{display:none;font-size:10px;color:var(--red);margin-top:5px;}
+    .crs-err.show{display:block;}
+
+    /* ── SUBJECT DROPDOWNS ── */
+    .sub-section{animation:fadeUp .35s ease both;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+    /* Group headers */
+    .sub-group{margin-bottom:20px;}
+    .sub-group-header{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;margin-bottom:12px;}
+    .sub-group-header.req-header{background:linear-gradient(135deg,#fef3c7,#fef9e7);border:1px solid #f59e0b;}
+    .sub-group-header.opt-header{background:linear-gradient(135deg,#f0fdf4,#ecfdf5);border:1px solid #86efac;}
+    .grp-badge{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;flex-shrink:0;}
+    .grp-badge.req{background:#f59e0b;color:#fff;}
+    .grp-badge.opt{background:#22c55e;color:#fff;}
+    .grp-info{flex:1;}
+    .grp-title{font-size:13px;font-weight:700;color:var(--navy);}
+    .grp-hint{font-size:11px;color:var(--muted);margin-top:2px;}
+
+    /* Subject row */
+    .sub-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;}
+    .sub-num{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;margin-top:8px;color:#fff;}
+    .sub-num.rn{background:linear-gradient(135deg,#b45309,#f59e0b);}
+    .sub-num.on{background:linear-gradient(135deg,#166534,#22c55e);}
+    .sub-col{flex:1;display:flex;flex-direction:column;gap:4px;}
+    .sub-select{width:100%;padding:10px 30px 10px 13px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--navy);background:var(--bg);outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a9bb5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;cursor:pointer;transition:border-color .2s,box-shadow .2s;}
+    .sub-select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.14);background:#fff;}
+    .sub-select.chosen{border-color:var(--gold);background:linear-gradient(135deg,#fffbf0,#fff);}
+    .sub-select.err-bd{border-color:var(--red);}
+    .sub-err-msg{font-size:10px;color:var(--red);display:none;}
+    .sub-err-msg.show{display:block;}
+
+    .form-err{display:none;font-size:11px;color:var(--red);margin-top:8px;padding:9px 13px;background:#fff8f8;border:1px solid #fca5a5;border-radius:7px;}
+    .form-err.show{display:block;}
+
+    /* ── PROCEED BTN ── */
+    .proceed-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--navy),#1a3a6e);color:var(--gold2);border:none;border-radius:10px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:16px;transition:all .25s;letter-spacing:.3px;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px rgba(13,31,60,.2);}
+    .proceed-btn:hover{opacity:.9;transform:translateY(-2px);box-shadow:0 8px 22px rgba(13,31,60,.3);}
+    .proceed-btn .arr{font-size:18px;transition:transform .2s;}
+    .proceed-btn:hover .arr{transform:translateX(5px);}
+
+    /* ── PAGE 2 ── */
+    .summ-bar{background:var(--card);border-radius:12px;border:1px solid var(--border);padding:14px 16px;margin-bottom:14px;box-shadow:var(--shadow);}
+    .summ-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+    .summ-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+    .back-btn{padding:6px 14px;background:#fff;border:1px solid var(--border);border-radius:8px;font-size:11px;color:var(--muted);cursor:pointer;font-family:inherit;transition:all .2s;}
+    .back-btn:hover{border-color:var(--gold);color:var(--navy);}
+    .summ-chips{display:flex;gap:6px;flex-wrap:wrap;}
+    .schip{display:flex;align-items:center;gap:5px;border-radius:7px;padding:4px 10px;font-size:11px;font-weight:600;color:var(--navy);}
+    .schip.req-chip{background:linear-gradient(135deg,#fef3c7,#fef9e7);border:1.5px solid #f59e0b;}
+    .schip.opt-chip{background:linear-gradient(135deg,#f0fdf4,#ecfdf5);border:1.5px solid #86efac;}
+    .schip .cn{width:16px;height:16px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;}
+    .schip.req-chip .cn{background:#b45309;}
+    .schip.opt-chip .cn{background:#166534;}
+
+    /* legend */
+    .leg-row{display:flex;gap:5px;flex-wrap:wrap;}
+    .li{display:flex;align-items:center;gap:4px;background:var(--bg);border-radius:6px;padding:3px 8px;border:1px solid var(--border);}
+    .ln{width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;}
+    .lt{font-size:10px;color:var(--navy);font-weight:500;}
+
+    /* dept group */
+    .dg{background:var(--card);border-radius:14px;border:1px solid var(--border);padding:18px 18px 14px;margin-bottom:14px;box-shadow:var(--shadow);}
+    .dg-header{display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:10px 14px;background:linear-gradient(135deg,var(--deep),#1a3a6e);border-radius:10px;}
+    .dg-name{font-family:'EB Garamond',serif;font-size:15px;font-weight:700;color:var(--gold2);flex:1;}
+    .dg-type{font-size:9px;padding:2px 8px;border-radius:8px;white-space:nowrap;}
+    .dg-type.req{background:rgba(245,158,11,.25);color:#fcd34d;}
+    .dg-type.opt{background:rgba(34,197,94,.2);color:#86efac;}
+    .dg-badge{font-size:10px;padding:2px 9px;border-radius:10px;white-space:nowrap;background:rgba(255,255,255,.1);color:rgba(255,255,255,.5);transition:all .3s;}
+    .dg-badge.all-done{background:rgba(26,122,74,.35);color:#4ade80;}
+
+    /* faculty card */
+    .fc{background:linear-gradient(135deg,#f9f5ec,#fff);border:1.5px solid var(--border);border-radius:11px;padding:14px 15px 12px;margin-bottom:10px;transition:box-shadow .2s;}
+    .fc:hover{box-shadow:0 3px 12px rgba(13,31,60,.08);}
+    .fc-head{display:flex;align-items:center;gap:10px;margin-bottom:11px;}
+    .fc-av{width:36px;height:36px;border-radius:9px;background:var(--deep);color:var(--gold2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;}
+    .fc-name{font-size:13px;font-weight:700;color:var(--deep);flex:1;line-height:1.3;}
+    .fc-dtag{font-size:10px;color:var(--muted);margin-top:1px;}
+
+    /* ── SKIP BUTTON (bigger) ── */
+    .skip-btn{
+      display:flex;align-items:center;gap:6px;
+      padding:10px 20px;
+      background:#fff3f3;
+      border:2px solid #fca5a5;
+      border-radius:10px;
+      color:var(--red);
+      font-size:13px;font-weight:700;
+      cursor:pointer;font-family:inherit;
+      transition:all .2s;
+      white-space:nowrap;
+      flex-shrink:0;
+    }
+    .skip-btn:hover{background:#fce4e4;border-color:var(--red);transform:scale(1.03);}
+    .skip-btn .sk-ico{font-size:16px;line-height:1;}
+    .fc.is-skip .fq{display:none;}
+    .fc.is-skip .skip-btn{display:none;}
+    .fc.is-skip{opacity:.5;border-style:dashed;border-color:#ccc;}
+    .skip-bar{display:none;margin-top:4px;}
+    .fc.is-skip .skip-bar{display:block;}
+    .unskip-btn{
+      display:flex;align-items:center;justify-content:center;gap:7px;
+      width:100%;padding:10px 18px;
+      background:#e9f7ef;
+      border:2px solid #86efac;
+      border-radius:10px;
+      color:var(--green);
+      font-size:13px;font-weight:700;
+      cursor:pointer;font-family:inherit;
+      transition:all .2s;
+    }
+    .unskip-btn:hover{background:#d5f5e3;border-color:var(--green);}
+
+    /* questions */
+    .qr{padding:9px 0;border-bottom:1px solid #ede8dc;display:flex;flex-direction:column;gap:7px;}
+    .qr:last-child{border-bottom:none;padding-bottom:0;}
+    .qt{font-size:12px;color:var(--navy);line-height:1.45;}
+    .qn{display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;background:var(--deep);color:var(--gold2);border-radius:4px;font-size:9px;font-weight:700;margin-right:5px;flex-shrink:0;vertical-align:middle;}
+    .rg{display:flex;gap:5px;flex-wrap:wrap;}
+    .rb{position:relative;}
+    .rb input[type=radio]{position:absolute;opacity:0;width:0;height:0;}
+    .rb label{display:flex;flex-direction:column;align-items:center;cursor:pointer;padding:6px 7px;border-radius:7px;border:1.5px solid var(--border);background:var(--bg);min-width:44px;transition:all .15s;user-select:none;}
+    .rb label .rn{font-size:13px;font-weight:700;color:var(--muted);line-height:1;}
+    .rb label .rl{font-size:7px;font-weight:600;text-transform:uppercase;letter-spacing:.3px;color:var(--muted);margin-top:2px;}
+    .rb label:hover{border-color:var(--gold);background:#fdf6e3;}
+    .rb input:checked+label{transform:translateY(-2px);}
+    .rb.r1 input:checked+label{background:#fce4e4;border-color:#c0392b;} .rb.r1 input:checked+label .rn,.rb.r1 input:checked+label .rl{color:#c0392b;}
+    .rb.r2 input:checked+label{background:#fdebd0;border-color:#e67e22;} .rb.r2 input:checked+label .rn,.rb.r2 input:checked+label .rl{color:#e67e22;}
+    .rb.r3 input:checked+label{background:#fef9e7;border-color:#d4ac0d;} .rb.r3 input:checked+label .rn,.rb.r3 input:checked+label .rl{color:#b7950b;}
+    .rb.r4 input:checked+label{background:#e9f7ef;border-color:#27ae60;} .rb.r4 input:checked+label .rn,.rb.r4 input:checked+label .rl{color:#1e8449;}
+    .rb.r5 input:checked+label{background:#d5f5e3;border-color:#1a7a4a;} .rb.r5 input:checked+label .rn,.rb.r5 input:checked+label .rl{color:#1a7a4a;}
+    .qe{color:var(--red);font-size:10px;display:none;}
+    .qe.show{display:block;}
+
+    /* submit */
+    .sub-wrap{text-align:center;margin-top:22px;}
+    .sub-btn{padding:14px 52px;background:linear-gradient(135deg,var(--navy),#1a3a6e);color:var(--gold2);border:2px solid rgba(201,168,76,.4);border-radius:50px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .25s;box-shadow:0 6px 20px rgba(13,31,60,.2);}
+    .sub-btn:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(13,31,60,.3);border-color:var(--gold);}
+    .sub-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+    #stMsg{display:none;margin-top:14px;padding:13px 16px;border-radius:9px;font-size:13px;font-weight:600;text-align:center;}
+    #stMsg.ok{background:#d5f5e3;color:#1a7a4a;border:1px solid #a9dfbf;display:block;}
+    #stMsg.err{background:#fce4e4;color:#c0392b;border:1px solid #f5b7b1;display:block;}
+    .footer{text-align:center;padding:16px;color:var(--muted);font-size:10px;}
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="emblem">
+    <img src="logo.png" alt="Karnataka Govt Logo" />
+  </div>
+  <h1>Government First Grade College</h1>
+  <p>Athani – 591304, Dist: Belagavi, Karnataka</p>
+  <div class="hbadge">Students Feedback on Teachers</div>
+</div>
+
+<!-- STEPPER -->
+<div class="stepper">
+  <div class="sc active" id="sc1">1</div><span class="sl active" id="sl1">Details &amp; Course</span>
+  <div class="sline" id="ln12"></div>
+  <div class="sc active" id="sc2">2</div><span class="sl active" id="sl2">Select Subjects</span>
+  <div class="sline" id="ln23"></div>
+  <div class="sc" id="sc3">3</div><span class="sl" id="sl3">Rate Faculty</span>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog">
+  <div class="prog-out"><div class="prog-in" id="pgBar"></div></div>
+  <div class="prog-lbl" id="pgLbl">0%</div>
+</div>
+
+<!-- PAGE SLIDER -->
+<div class="page-container">
+<div class="page-slider" id="slider">
+
+  <!-- ══════ PAGE 1 ══════ -->
+  <div class="page" id="pg1">
+  <div class="wrap">
+  <form id="form" novalidate>
+
+    <!-- Student Details -->
+    <div class="card">
+      <div class="card-head"><span>📋</span> Student Details</div>
+      <div class="fg">
+        <div class="f" id="w-sid">
+          <label>Student ID <span class="r">*</span></label>
+          <input type="text" id="sid" placeholder="e.g. SMG36645"/>
+          <span class="em">Required</span>
+        </div>
+        <div class="f" id="w-gen">
+          <label>Gender <span class="r">*</span></label>
+          <select id="gen"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select>
+          <span class="em">Required</span>
+        </div>
+        <div class="f" id="w-sem">
+          <label>Semester <span class="r">*</span></label>
+          <select id="sem"><option value="">Select</option><option>I</option><option>II</option><option>III</option><option>IV</option><option>V</option><option>VI</option></select>
+          <span class="em">Required</span>
+        </div>
+        <div class="f" id="w-yr">
+          <label>Academic Year <span class="r">*</span></label>
+          <input type="text" id="yr" placeholder="e.g. 2024-25"/>
+          <span class="em">Required</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Course Selection -->
+    <div class="card">
+      <div class="card-head"><span>🎓</span> Select Your Course</div>
+      <div class="course-grid">
+        <div class="cp"><input type="radio" name="course" value="BA"   id="cBA"   onchange="onCourse()"><label for="cBA">  <span class="cpn">B.A</span>  <span class="cpf">Bachelor of Arts</span></label></div>
+        <div class="cp"><input type="radio" name="course" value="BCOM" id="cBCOM" onchange="onCourse()"><label for="cBCOM"><span class="cpn">B.COM</span><span class="cpf">Bachelor of Commerce</span></label></div>
+        <div class="cp"><input type="radio" name="course" value="BSC"  id="cBSC"  onchange="onCourse()"><label for="cBSC"> <span class="cpn">B.SC</span> <span class="cpf">Bachelor of Science</span></label></div>
+        <div class="cp"><input type="radio" name="course" value="BCA"  id="cBCA"  onchange="onCourse()"><label for="cBCA"> <span class="cpn">BCA</span>  <span class="cpf">Bachelor of Computer Applications</span></label></div>
+        <div class="cp"><input type="radio" name="course" value="BBA"  id="cBBA"  onchange="onCourse()"><label for="cBBA"> <span class="cpn">BBA</span>  <span class="cpf">Bachelor of Business Administration</span></label></div>
+        <div class="cp"><input type="radio" name="course" value="MCOM" id="cMCOM" onchange="onCourse()"><label for="cMCOM"><span class="cpn">M.COM</span><span class="cpf">Master of Commerce</span></label></div>
+      </div>
+      <div class="crs-err" id="crsErr">Please select your course.</div>
+    </div>
+
+    <!-- Subject / Department Selection (shown after course pick) -->
+    <div id="subSection" style="display:none;">
+      <div class="card sub-section">
+        <div class="card-head"><span>📚</span> Select Your Subjects / Departments</div>
+
+        <div id="subDesc" style="background:#fef9e7;border:1px solid #d4ac0d;border-radius:9px;padding:11px 14px;margin-bottom:20px;font-size:12px;color:#78350f;line-height:1.6;">
+          Select <strong>3 compulsory subjects</strong> you are studying. You may also add up to <strong>4 optional subjects</strong>. All departments of the college are listed — pick only what you study.
+        </div>
+
+        <!-- ─── COMPULSORY 3 ─── -->
+        <div class="sub-group">
+          <div class="sub-group-header req-header">
+            <span class="grp-badge req">⚑ Compulsory</span>
+            <div class="grp-info">
+              <div class="grp-title" id="compTitle">Compulsory Subjects — Select 3</div>
+              <div class="grp-hint" id="compHint">All 3 must be filled. Teachers from these departments will be shown for feedback.</div>
+            </div>
+          </div>
+          <div id="reqRows"></div>
+          <div class="form-err" id="reqErr">⚠️ Please select all compulsory subjects before continuing.</div>
+        </div>
+
+        <!-- ─── OPTIONAL up to 4 ─── -->
+        <div class="sub-group">
+          <div class="sub-group-header opt-header">
+            <span class="grp-badge opt">✦ Optional</span>
+            <div class="grp-info">
+              <div class="grp-title">Optional Subjects — Up to 4</div>
+              <div class="grp-hint">Leave blank if you have no additional subjects.</div>
+            </div>
+          </div>
+          <div id="optRows"></div>
+        </div>
+
+        <button type="button" class="proceed-btn" onclick="proceed()">
+          Continue to Faculty Feedback <span class="arr">→</span>
+        </button>
+      </div>
+    </div>
+
+  </form>
+  </div>
+  </div><!-- /pg1 -->
+
+  <!-- ══════ PAGE 2 ══════ -->
+  <div class="page" id="pg2">
+  <div class="wrap">
+
+    <!-- Summary -->
+    <div class="summ-bar">
+      <div class="summ-top">
+        <span class="summ-title">📚 Your Selected Subjects</span>
+        <button type="button" class="back-btn" onclick="goBack()">← Change Subjects</button>
+      </div>
+      <div class="summ-chips" id="summChips"></div>
+    </div>
+
+    <!-- Legend -->
+    <div class="card" style="padding:12px 16px;">
+      <div class="leg-row">
+        <div class="li"><div class="ln" style="background:#c0392b">1</div><span class="lt">Poor</span></div>
+        <div class="li"><div class="ln" style="background:#e67e22">2</div><span class="lt">Acceptable</span></div>
+        <div class="li"><div class="ln" style="background:#d4ac0d">3</div><span class="lt">Average</span></div>
+        <div class="li"><div class="ln" style="background:#27ae60">4</div><span class="lt">Good</span></div>
+        <div class="li"><div class="ln" style="background:#1a7a4a">5</div><span class="lt">Very Good</span></div>
+        <div class="li" style="border-style:dashed"><span class="lt" style="color:var(--muted);font-style:italic">⊘ Skip if not your teacher</span></div>
+      </div>
+    </div>
+
+    <!-- Faculty groups injected here -->
+    <div id="dgCont"></div>
+
+    <!-- Suggestions -->
+    <div class="card">
+      <div class="card-head"><span>💬</span> General Suggestions</div>
+      <div class="f">
+        <label>Any Other Suggestions (Optional)</label>
+        <textarea id="sugg" placeholder="Any feedback about the college or teaching quality…"></textarea>
+      </div>
+    </div>
+
+    <div class="sub-wrap">
+      <button type="submit" form="form" class="sub-btn" id="subBtn">✦ Submit All Feedback</button>
+      <div id="stMsg"></div>
+    </div>
+
+  </div>
+  </div><!-- /pg2 -->
+
+</div><!-- slider -->
+</div><!-- container -->
+
+<div class="footer">Government First Grade College, Athani – 591304 &nbsp;|&nbsp; Dist: Belagavi, Karnataka</div>
+
+<script>
+// ════════════════════════════════════════════
+//  DATA
+// ════════════════════════════════════════════
+const FACULTY = {
+  "Business Management":["Sadashiv Huddar","Yallappa Hukkeri"],
+  "Chemistry":          ["Akshata Shedbal","Dr. Vinayak N. Vanjeri"],
+  "Commerce":           ["Mahantesh Ujjainimath","Manjunath S Hugar","Jyoti Kenchannavar","Jayashri Nagaral","Dr. Nagaratna Renakigoudar","Jinendr Banajawad"],
+  "Computer Science":   ["Ramachandra Chavan","Basavaraj Patil","Dr. Prasanna Kumar G"],
+  "Economics":          ["Ashok Vishnu Kurane","Kavita Ghatakamble","Dr. Harisha","Shamala M P","Shilpa Kareppa Ramannagol"],
+  "Education":          ["Madhusudhan T A M A","Nagappa Koti"],
+  "English":            ["Abhinandan Sulakude","Sanjay Sainappa Kamble","Deepa Gadivaddar","Pramod Munje","Anisa Dastagirsab Babuni","Dr. Shantinath Baloj"],
+  "Geography":          ["Raghavendra Gouri","Dr. Arun Oddin","Shivanand Navi","Kaveri Kodi"],
+  "History":            ["Shrishail Devaraddi","Siddappa Kuddannavar","Mallappa Salagare","Basappa Rayannavar","Dr. Shivanand Helavar","Kumar Gayakwad","Jadhav Shreekant","Mangalagowri K N","Padmavati V","Prof. Vilas N Kamble"],
+  "Kannada":            ["Parasappa Pujari","Dr. Mahantesh Shivashankar","Veerabhadrappa Maradi","Ramanna S Doddaningappagol","Vijay Ramu Kamble","Yallappa Koppad","Dr. Rajendra Gondhale","Ravasab Annappa Badiger","Undadi Santosh"],
+  "Mathematics":        ["Deepa Patil","Akshata Mamadapur","Appasab Mangond","Akshata Bhahusab Ajur","Surekha Devaraddi"],
+  "Physical Education": ["Ramesh Bilembagi"],
+  "Physics":            ["Shivanand B Hosamani","Drakshayani S Teli","Mallikarjun Patil"],
+  "Political Science":  ["Dr. Mallappa Channapur","Nachiket Nooli","Nagappa Chikkatti","Basagonda Mugganawar","Shivanand Kamble","Raju Bajantri","Patil Somaling Appaso","Suresh Takatarao"],
+  "Sociology":          ["Vidyawati Badiger","Mahalaxmi Gouda"]
+};
+
+// ALL departments — every course sees every subject
+const ALL_DEPTS = Object.keys(FACULTY).sort();
+
+const QUESTIONS = [
+  "Regularity of teacher to class",
+  "Preparation for the class",
+  "Subject knowledge of teacher",
+  "Presentation and communication skills",
+  "Knowledge on usage of ICT",
+  "Time allotted to interaction",
+  "Process of internal assessment by teacher",
+  "Availability outside the class",
+  "Guidance and mentoring",
+  "Overall effectiveness"
+];
+const RLB = ["Poor","Accept.","Average","Good","V.Good"];
+const RCL = ["r1","r2","r3","r4","r5"];
+
+let selCourse = null;
+let selDepts  = [];
+let reqVals   = [];
+
+// determine how many compulsory subjects are needed (2 for V/VI sems)
+function getCompCount() {
+  const sem = document.getElementById('sem')?.value;
+  return (sem === 'V' || sem === 'VI') ? 2 : 3;
+}
+
+// ════════════════════════════════════════════
+//  Build dropdown options HTML (all depts)
+// ════════════════════════════════════════════
+function deptOptions(placeholder) {
+  let html = `<option value="">${placeholder}</option>`;
+  ALL_DEPTS.forEach(d => { html += `<option value="${d}">${d}</option>`; });
+  return html;
+}
+
+// ════════════════════════════════════════════
+//  Course selected → show subject section
+// ════════════════════════════════════════════
+function onCourse() {
+  selCourse = document.querySelector('input[name="course"]:checked')?.value || null;
+  if (!selCourse) return;
+  document.getElementById('crsErr').classList.remove('show');
+
+  const compCount = getCompCount();
+
+  // update description text and header info
+  const desc = document.getElementById('subDesc');
+  if (desc) {
+    desc.innerHTML = `Select <strong>${compCount} compulsory subject${compCount>1?'s':''}</strong> you are studying. You may also add up to <strong>4 optional subjects</strong>. All departments of the college are listed — pick only what you study.`;
+  }
+  const titleEl = document.getElementById('compTitle');
+  const hintEl  = document.getElementById('compHint');
+  if (titleEl) titleEl.textContent = `Compulsory Subjects — Select ${compCount}`;
+  if (hintEl) hintEl.textContent = `All ${compCount} must be filled. Teachers from these departments will be shown for feedback.`;
+
+  // Build compulsory rows dynamically
+  let rHTML = '';
+  for (let i = 0; i < compCount; i++) {
+    rHTML += `
+      <div class="sub-row" id="rrow${i}">
+        <div class="sub-num rn">${i + 1}</div>
+        <div class="sub-col">
+          <select class="sub-select" id="req${i}" onchange="syncDups()">
+            ${deptOptions('— Select Compulsory Subject ' + (i+1) + ' —')}
+          </select>
+          <span class="sub-err-msg" id="rerr${i}">Please select this compulsory subject</span>
+        </div>
+      </div>`;
+  }
+  document.getElementById('reqRows').innerHTML = rHTML;
+
+  // Build 4 optional rows (unchanged)
+  let oHTML = '';
+  for (let i = 0; i < 4; i++) {
+    oHTML += `
+      <div class="sub-row" id="orow${i}">
+        <div class="sub-num on">${i + 1}</div>
+        <div class="sub-col">
+          <select class="sub-select" id="opt${i}" onchange="syncDups()">
+            ${deptOptions('— Optional Subject ' + (i+1) + ' (leave blank if none) —')}
+          </select>
+        </div>
+      </div>`;
+  }
+  document.getElementById('optRows').innerHTML = oHTML;
+
+  document.getElementById('subSection').style.display = 'block';
+  document.getElementById('reqErr').classList.remove('show');
+  updatePg1Prog();
+}
+
+// ════════════════════════════════════════════
+//  Prevent duplicate selection across all rows
+// ════════════════════════════════════════════
+function syncDups() {
+  // Collect all currently chosen values
+  const allSels   = [...document.querySelectorAll('#reqRows .sub-select, #optRows .sub-select')];
+  const chosen    = allSels.map(s => s.value).filter(Boolean);
+
+  allSels.forEach(sel => {
+    const myVal = sel.value;
+    Array.from(sel.options).forEach(opt => {
+      if (!opt.value) return;
+      opt.disabled = chosen.includes(opt.value) && opt.value !== myVal;
+    });
+    myVal ? sel.classList.add('chosen') : sel.classList.remove('chosen');
+    if (myVal) sel.classList.remove('err-bd');
+  });
+
+  // Clear compulsory errors if now filled
+  for (let i = 0; i < 3; i++) {
+    if (document.getElementById(`req${i}`)?.value)
+      document.getElementById(`rerr${i}`)?.classList.remove('show');
+  }
+  document.getElementById('reqErr')?.classList.remove('show');
+  updatePg1Prog();
+}
+
+// ════════════════════════════════════════════
+//  Progress
+// ════════════════════════════════════════════
+function updatePg1Prog() {
+  const sf = ['sid','gen','sem','yr'].filter(id => document.getElementById(id)?.value?.trim()).length;
+  const cf = selCourse ? 1 : 0;
+  const compCount = getCompCount();
+  const rf = document.querySelectorAll('#reqRows .sub-select').length
+    ? [...document.querySelectorAll('#reqRows .sub-select')].filter(s => s.value).length : 0;
+  const of = document.querySelectorAll('#optRows .sub-select').length
+    ? [...document.querySelectorAll('#optRows .sub-select')].filter(s => s.value).length : 0;
+  const pct = Math.round((sf + cf + rf + of) / (4 + 1 + compCount + 4) * 50);
+  document.getElementById('pgBar').style.width   = pct + '%';
+  document.getElementById('pgLbl').textContent   = pct + '%';
+}
+document.getElementById('form').addEventListener('input',  updatePg1Prog);
+document.getElementById('form').addEventListener('change', updatePg1Prog);
+
+// if semester changes after course selected, rebuild rows with new compulsory count
+document.getElementById('sem').addEventListener('change', () => {
+  if (selCourse) onCourse();
+});
+
+// ════════════════════════════════════════════
+//  Proceed → validate → slide to page 2
+// ════════════════════════════════════════════
+function proceed() {
+  let ok = true;
+
+  // Student fields
+  [['sid','w-sid'],['gen','w-gen'],['sem','w-sem'],['yr','w-yr']].forEach(([fid,wid]) => {
+    const el = document.getElementById(fid), wr = document.getElementById(wid);
+    el.value.trim() ? wr.classList.remove('inv') : (wr.classList.add('inv'), ok = false);
+  });
+
+  // Course
+  if (!selCourse) { document.getElementById('crsErr').classList.add('show'); ok = false; }
+
+  // Compulsory subjects count depends on semester
+  if (selCourse) {
+    let missing = false;
+    const compCount = getCompCount();
+    for (let i = 0; i < compCount; i++) {
+      const sel = document.getElementById(`req${i}`);
+      if (!sel?.value) {
+        sel?.classList.add('err-bd');
+        document.getElementById(`rerr${i}`)?.classList.add('show');
+        missing = true; ok = false;
+      }
+    }
+    if (missing) document.getElementById('reqErr').classList.add('show');
+  }
+
+  if (!ok) {
+    document.querySelector('.inv, .crs-err.show, .form-err.show')
+      ?.scrollIntoView({ behavior:'smooth', block:'center' });
+    return;
+  }
+
+  // Collect selected depts
+  const compCount = getCompCount();
+  const reqErrEl = document.getElementById('reqErr');
+  if (reqErrEl) {
+    reqErrEl.textContent = `⚠️ Please select all ${compCount} compulsory subjects before continuing.`;
+  }
+  reqVals = [...Array(compCount)].map((_,i) => document.getElementById(`req${i}`)?.value).filter(Boolean);
+  const optVals = [...Array(4)].map((_,i) => document.getElementById(`opt${i}`)?.value).filter(Boolean);
+  selDepts = [...new Set([...reqVals, ...optVals])];
+
+  // Build page 2 content
+  buildPage2();
+
+  // ── Slide ──
+  document.getElementById('slider').style.transform = 'translateX(-100%)';
+  document.getElementById('sc3').classList.add('active');
+  document.getElementById('sl3').classList.add('active');
+  document.getElementById('ln23').classList.add('done');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  updatePg2Prog();
+}
+
+function goBack() {
+  document.getElementById('slider').style.transform = 'translateX(0)';
+  document.getElementById('sc3').classList.remove('active','done');
+  document.getElementById('sl3').classList.remove('active','done');
+  document.getElementById('ln23').classList.remove('done');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ════════════════════════════════════════════
+//  Build Page 2
+// ════════════════════════════════════════════
+function buildPage2() {
+  // Summary chips
+  document.getElementById('summChips').innerHTML = selDepts.map((d, i) => {
+    const isReq = reqVals.includes(d);
+    return `<div class="schip ${isReq?'req-chip':'opt-chip'}">
+      <div class="cn">${i+1}</div>${d}
+    </div>`;
+  }).join('');
+
+  const cont = document.getElementById('dgCont');
+  cont.innerHTML = '';
+
+  selDepts.forEach((dept, di) => {
+    const facs = FACULTY[dept] || [];
+    if (!facs.length) return;
+
+    const isReq = reqVals.includes(dept);
+    const sec   = document.createElement('div');
+    sec.className = 'dg';
+    sec.id = `dg${di}`;
+
+    let cards = '';
+    facs.forEach((fac, fi) => {
+      const key = `d${di}f${fi}`;
+      const initials = fac.replace(/Dr\.|Prof\.|Mr\.|Ms\./gi,'').trim()
+        .split(' ').filter(Boolean).slice(0,2).map(w => w[0].toUpperCase()).join('');
+
+      let qrows = '';
+      QUESTIONS.forEach((q, qi) => {
+        const nm = `${key}q${qi+1}`;
+        let btns = '';
+        for (let v=1;v<=5;v++) {
+          btns += `<div class="rb ${RCL[v-1]}">
+            <input type="radio" name="${nm}" value="${v}" id="${nm}v${v}">
+            <label for="${nm}v${v}"><span class="rn">${v}</span><span class="rl">${RLB[v-1]}</span></label>
+          </div>`;
+        }
+        qrows += `<div class="qr">
+          <div class="qt"><span class="qn">${qi+1}</span>${q}</div>
+          <div class="rg">${btns}</div>
+          <div class="qe" id="qe-${nm}">Select a rating</div>
+        </div>`;
+      });
+
+      cards += `
+        <div class="fc" id="fc${key}" data-key="${key}" data-dept="${dept}" data-fac="${fac}">
+          <div class="fc-head">
+            <div class="fc-av">${initials}</div>
+            <div style="flex:1">
+              <div class="fc-name">${fac}</div>
+              <div class="fc-dtag">${dept}</div>
+            </div>
+            <button type="button" class="skip-btn" onclick="skipF('${key}')">
+              <span class="sk-ico">⊘</span> Skip
+            </button>
+          </div>
+          <div class="fq" id="fq${key}">${qrows}</div>
+          <div class="skip-bar">
+            <button type="button" class="unskip-btn" onclick="unskipF('${key}')">
+              ↩ Undo Skip — Rate ${fac.split(' ').slice(-1)[0]}
+            </button>
+          </div>
+        </div>`;
+    });
+
+    sec.innerHTML = `
+      <div class="dg-header">
+        <div class="dg-name">${dept}</div>
+        <span class="dg-type ${isReq?'req':'opt'}">${isReq ? '⚑ Compulsory' : '✦ Optional'}</span>
+        <div class="dg-badge" id="dgb${di}">0 / ${facs.length} done</div>
+      </div>
+      ${cards}`;
+    cont.appendChild(sec);
+  });
+
+  cont.addEventListener('change', updatePg2Prog);
+}
+
+function skipF(key) {
+  const c = document.getElementById(`fc${key}`);
+  c.classList.add('is-skip'); c.dataset.skipped = '1';
+  updatePg2Prog();
+}
+function unskipF(key) {
+  const c = document.getElementById(`fc${key}`);
+  c.classList.remove('is-skip'); delete c.dataset.skipped;
+  updatePg2Prog();
+}
+
+function updatePg2Prog() {
+  let total = 0, done = 0;
+  selDepts.forEach((dept, di) => {
+    const facs = FACULTY[dept] || [];
+    let dd = 0;
+    facs.forEach((_, fi) => {
+      const key  = `d${di}f${fi}`;
+      const card = document.getElementById(`fc${key}`);
+      if (!card) return;
+      total++;
+      if (card.dataset.skipped === '1') { dd++; done++; return; }
+      if (document.querySelector(`input[name="${key}q1"]:checked`)) { dd++; done++; }
+    });
+    const badge = document.getElementById(`dgb${di}`);
+    if (badge) {
+      badge.textContent = `${dd} / ${facs.length} done`;
+      badge.className = 'dg-badge' + (dd === facs.length ? ' all-done' : '');
+    }
+  });
+  const pct = Math.min(100, 50 + (total > 0 ? Math.round(done/total*50) : 0));
+  document.getElementById('pgBar').style.width   = pct + '%';
+  document.getElementById('pgLbl').textContent   = pct + '%';
+  if (pct === 100) {
+    document.getElementById('sc3').classList.add('done');
+    document.getElementById('sl3').classList.add('done');
+  }
+}
+
+// ════════════════════════════════════════════
+//  Validate Page 2
+// ════════════════════════════════════════════
+function validatePg2() {
+  let ok = true;
+  selDepts.forEach((dept, di) => {
+    (FACULTY[dept] || []).forEach((_, fi) => {
+      const key  = `d${di}f${fi}`;
+      const card = document.getElementById(`fc${key}`);
+      if (!card || card.dataset.skipped === '1') return;
+      for (let q = 1; q <= 10; q++) {
+        const c = document.querySelector(`input[name="${key}q${q}"]:checked`);
+        const e = document.getElementById(`qe-${key}q${q}`);
+        c ? e?.classList.remove('show') : (e?.classList.add('show'), ok = false);
+      }
+    });
+  });
+  return ok;
+}
+
+// ════════════════════════════════════════════
+//  Submit
+// ════════════════════════════════════════════
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwRwLyWW3dV8fDuNRU4GQflpW1mrinnw4Rohmrg5Tibay9Td0r5GB9fS77m5W-0fhAHUw/exec';
+
+document.getElementById('form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  // Ensure on page 2
+  document.getElementById('slider').style.transform = 'translateX(-100%)';
+
+  if (!validatePg2()) {
+    setTimeout(() => {
+      document.querySelector('.qe.show')?.closest('.dg,.fc')?.scrollIntoView({ behavior:'smooth', block:'center' });
+    }, 420);
+    return;
+  }
+
+  const btn = document.getElementById('subBtn');
+  const msg = document.getElementById('stMsg');
+  btn.disabled = true; btn.textContent = '⏳ Submitting…';
+  msg.className = ''; msg.style.display = 'none';
+
+  const payload = {
+    studentId:    document.getElementById('sid').value.trim(),
+    gender:       document.getElementById('gen').value,
+    course:       selCourse,
+    semester:     document.getElementById('sem').value,
+    academicYear: document.getElementById('yr').value.trim(),
+    departments:  selDepts,
+    suggestions:  document.getElementById('sugg').value.trim(),
+    feedbacks:    []
+  };
+
+  selDepts.forEach((dept, di) => {
+    (FACULTY[dept] || []).forEach((fac, fi) => {
+      const key     = `d${di}f${fi}`;
+      const card    = document.getElementById(`fc${key}`);
+      if (!card) return;
+      const skipped = card.dataset.skipped === '1';
+      const entry   = { department: dept, facultyName: fac, skipped, compulsory: reqVals.includes(dept) };
+      if (!skipped) {
+        let tot = 0;
+        for (let q = 1; q <= 10; q++) {
+          const v = parseInt(document.querySelector(`input[name="${key}q${q}"]:checked`)?.value || 0);
+          entry[`q${q}`] = v; tot += v;
+        }
+        entry.totalScore   = tot;
+        entry.averageScore = (tot / 10).toFixed(2);
+      }
+      payload.feedbacks.push(entry);
+    });
+  });
+
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    msg.className   = 'ok';
+    msg.textContent = '✅ Thank you! Your feedback has been submitted successfully.';
+
+    // Full reset
+    document.getElementById('form').reset();
+    document.getElementById('dgCont').innerHTML    = '';
+    document.getElementById('subSection').style.display = 'none';
+    document.getElementById('slider').style.transform   = 'translateX(0)';
+    document.getElementById('sc3').classList.remove('active','done');
+    document.getElementById('sl3').classList.remove('active','done');
+    document.getElementById('ln23').classList.remove('done');
+    document.getElementById('pgBar').style.width   = '0%';
+    document.getElementById('pgLbl').textContent   = '0%';
+    selCourse = null; selDepts = []; reqVals = [];
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } catch (err) {
+    msg.className   = 'err';
+    msg.textContent = '❌ Submission failed. Please check your connection and try again.';
+  } finally {
+    btn.disabled    = false;
+    btn.textContent = '✦ Submit All Feedback';
+    msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+});
+</script>
+</body>
+</html>
