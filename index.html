@@ -11,7 +11,7 @@
       --bg:#f0ebe0; --card:#ffffff; --border:#d4c5a0; --muted:#8a9bb5;
       --red:#c0392b; --green:#1a7a4a; --shadow:0 4px 20px rgba(13,31,60,.09);
     }
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
     html{scroll-behavior:smooth;}
     body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--navy);min-height:100vh;overflow-x:hidden;}
 
@@ -46,7 +46,7 @@
     .prog-lbl{color:var(--gold2);font-size:10px;min-width:30px;}
 
     /* ── PAGE SLIDER ── */
-    .page-container{overflow:hidden;}
+    .page-container{overflow:hidden;max-width:100%;}
     .page-slider{display:flex;transition:transform .5s cubic-bezier(.4,0,.2,1);}
     .page{min-width:100%;flex-shrink:0;}
     /* allow fade on mobile instead of sliding */
@@ -210,7 +210,7 @@
     .rg{display:flex;gap:5px;flex-wrap:wrap;}
     .rb{position:relative;}
     .rb input[type=radio]{position:absolute;opacity:0;width:0;height:0;}
-    .rb label{display:flex;flex-direction:column;align-items:center;cursor:pointer;padding:6px 7px;border-radius:7px;border:1.5px solid var(--border);background:var(--bg);min-width:44px;transition:all .15s;user-select:none;}
+    .rb label{display:flex;flex-direction:column;align-items:center;cursor:pointer;padding:6px 7px;border-radius:7px;border:1.5px solid var(--border);background:var(--bg);min-width:48px;min-height:44px;transition:all .15s;user-select:none;justify-content:center;}
     .rb label .rn{font-size:13px;font-weight:700;color:var(--muted);line-height:1;}
     .rb label .rl{font-size:7px;font-weight:600;text-transform:uppercase;letter-spacing:.3px;color:var(--muted);margin-top:2px;}
     .rb label:hover{border-color:var(--gold);background:#fdf6e3;}
@@ -233,7 +233,34 @@
     #stMsg.err{background:#fce4e4;color:#c0392b;border:1px solid #f5b7b1;display:block;}
     .footer{text-align:center;padding:16px;color:var(--muted);font-size:10px;}
 
-    /* additional mobile tweaks */
+    /* =================================
+       MOBILE OPTIMIZATION
+    ================================= */
+    @media(max-width:768px){
+      body{font-size:14px;}
+      .wrap{padding:16px 10px 80px;}
+      .card{padding:14px;border-radius:10px;}
+      .card-head{font-size:14px;}
+      .fg{grid-template-columns:1fr;}
+      .f input,.f select,.f textarea{font-size:15px;padding:11px;}
+      .course-grid{grid-template-columns:1fr 1fr;gap:8px;}
+      .cp label{min-height:60px;padding:10px 6px;}
+      .cp label .cpn{font-size:14px;}
+      .cp label .cpf{font-size:8px;}
+      .sub-row{flex-direction:column;gap:6px;}
+      .sub-num{width:24px;height:24px;font-size:10px;}
+      .fc{padding:12px;}
+      .fc-head{flex-wrap:wrap;flex-direction:column;align-items:flex-start;}
+      .fc-name{font-size:12px;}
+      .rb label{min-width:38px;padding:7px 6px;}
+      .rb label .rn{font-size:14px;}
+      .rb label .rl{font-size:8px;}
+      .skip-btn{padding:8px 14px;font-size:12px;align-self:flex-end;margin-top:6px;}
+      .sub-btn{width:100%;font-size:16px;padding:14px;border-radius:10px;}
+      .sub-wrap{position:sticky;bottom:0;background:#f0ebe0;padding-top:10px;}
+    }
+
+    /* legacy small phone tweaks */
     @media(max-width:600px){
       .wrap{padding:22px 10px 70px;}
       .card{padding:16px 16px 12px;margin-bottom:14px;}
@@ -494,25 +521,21 @@ function deptOptions(placeholder) {
 // ════════════════════════════════════════════
 let currentPage = 0; // 0 = first page, 1 = second page
 
-function goToPage(pageIndex) {
+function goToPage(pageIndex){
   currentPage = pageIndex;
-  if (window.innerWidth <= 600) {
-    // mobile: fade between pages manually
-    const pages = Array.from(document.querySelectorAll('.page'));
-    pages.forEach((p, i) => {
-      if (i === pageIndex) {
-        p.style.display = 'block';
-        // ensure starting opacity is 0 for in animation
-        p.style.opacity = 0;
-        requestAnimationFrame(() => { p.style.opacity = 1; });
-      } else {
-        // fade out then hide
-        p.style.opacity = 0;
-        setTimeout(() => { p.style.display = 'none'; }, 300);
-      }
-    });
-  } else {
-    document.getElementById('slider').style.transform = `translateX(-${pageIndex * 100}%)`;
+  const pages = document.querySelectorAll('.page');
+  pages.forEach((p,i)=>{
+    if(i===pageIndex){
+      p.style.display='block';
+      p.classList.add('active');
+    } else {
+      p.style.display='none';
+      p.classList.remove('active');
+    }
+  });
+  // also keep desktop slider in sync
+  if(window.innerWidth > 600){
+    document.getElementById('slider').style.transform=`translateX(-${pageIndex*100}%)`;
   }
 }
 
