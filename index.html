@@ -825,83 +825,101 @@ function validatePg2() {
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwRwLyWW3dV8fDuNRU4GQflpW1mrinnw4Rohmrg5Tibay9Td0r5GB9fS77m5W-0fhAHUw/exec';
 
 document.getElementById('form').addEventListener('submit', async function(e) {
+
   e.preventDefault();
 
-  // Ensure on page 2
-  document.getElementById('slider').style.transform = 'translateX(-100%)';
-
   if (!validatePg2()) {
-    setTimeout(() => {
-      document.querySelector('.qe.show')?.closest('.dg,.fc')?.scrollIntoView({ behavior:'smooth', block:'center' });
-    }, 420);
+    document.querySelector('.qe.show')?.scrollIntoView({behavior:"smooth"});
     return;
   }
 
   const btn = document.getElementById('subBtn');
   const msg = document.getElementById('stMsg');
-  btn.disabled = true; btn.textContent = '⏳ Submitting…';
-  msg.className = ''; msg.style.display = 'none';
+
+  btn.disabled = true;
+  btn.textContent = "Submitting...";
 
   const payload = {
-    studentId:    document.getElementById('sid').value.trim(),
-    gender:       document.getElementById('gen').value,
-    course:       selCourse,
-    semester:     document.getElementById('sem').value,
+    studentId: document.getElementById('sid').value.trim(),
+    gender: document.getElementById('gen').value,
+    course: selCourse,
+    semester: document.getElementById('sem').value,
     academicYear: document.getElementById('yr').value.trim(),
-    departments:  selDepts,
-    suggestions:  document.getElementById('sugg').value.trim(),
-    feedbacks:    []
+    departments: selDepts,
+    suggestions: document.getElementById('sugg').value.trim(),
+    feedbacks: []
   };
 
   selDepts.forEach((dept, di) => {
+
     (FACULTY[dept] || []).forEach((fac, fi) => {
-      const key     = `d${di}f${fi}`;
-      const card    = document.getElementById(`fc${key}`);
+
+      const key = `d${di}f${fi}`;
+      const card = document.getElementById(`fc${key}`);
+
       if (!card) return;
-      const skipped = card.dataset.skipped === '1';
-      const entry   = { department: dept, facultyName: fac, skipped, compulsory: reqVals.includes(dept) };
+
+      const skipped = card.dataset.skipped === "1";
+
+      const entry = {
+        department: dept,
+        faculty: fac,
+        skipped: skipped
+      };
+
       if (!skipped) {
-        let tot = 0;
+
         for (let q = 1; q <= 10; q++) {
-          const v = parseInt(document.querySelector(`input[name="${key}q${q}"]:checked`)?.value || 0);
-          entry[`q${q}`] = v; tot += v;
+
+          entry["q" + q] = parseInt(
+            document.querySelector(`input[name="${key}q${q}"]:checked`)?.value || 0
+          );
+
         }
-        entry.totalScore   = tot;
-        entry.averageScore = (tot / 10).toFixed(2);
+
       }
+
       payload.feedbacks.push(entry);
+
     });
+
   });
 
   try {
-    await fetch(APPS_SCRIPT_URL, {
-      method: 'POST', mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
+
+    const response = await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify(payload)
     });
-    msg.className   = 'ok';
-    msg.textContent = '✅ Thank you! Your feedback has been submitted successfully.';
 
-    // Full reset
-    document.getElementById('form').reset();
-    document.getElementById('dgCont').innerHTML    = '';
-    document.getElementById('subSection').style.display = 'none';
-    document.getElementById('slider').style.transform   = 'translateX(0)';
-    document.getElementById('sc3').classList.remove('active','done');
-    document.getElementById('sl3').classList.remove('active','done');
-    document.getElementById('ln23').classList.remove('done');
-    document.getElementById('pgBar').style.width   = '0%';
-    document.getElementById('pgLbl').textContent   = '0%';
-    selCourse = null; selDepts = []; reqVals = [];
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  } catch (err) {
-    msg.className   = 'err';
-    msg.textContent = '❌ Submission failed. Please check your connection and try again.';
-  } finally {
-    btn.disabled    = false;
-    btn.textContent = '✦ Submit All Feedback';
-    msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const result = await response.json();
+
+    if(result.status === "success"){
+
+      msg.className = "ok";
+      msg.textContent = "Feedback submitted successfully.";
+
+      document.getElementById("form").reset();
+
+    } else {
+
+      throw new Error(result.message);
+
+    }
+
+  } catch(err){
+
+    msg.className = "err";
+    msg.textContent = "Submission failed. Please try again.";
+
   }
+
+  btn.disabled = false;
+  btn.textContent = "Submit Feedback";
+
 });
 </script>
 </body>
