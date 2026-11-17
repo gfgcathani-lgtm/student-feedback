@@ -314,15 +314,6 @@
       </div>
       <div class="fg">
 
-        <div class="f" id="w-sid">
-          <label>
-            Student ID <span class="r">*</span>
-            <span class="kn">ವಿದ್ಯಾರ್ಥಿ ಐಡಿ</span>
-          </label>
-          <input type="text" id="sid" placeholder="e.g. SMG36645"/>
-          <span class="em">Required / ಅಗತ್ಯವಿದೆ</span>
-        </div>
-
         <div class="f" id="w-gen">
           <label>
             Gender <span class="r">*</span>
@@ -356,9 +347,7 @@
             <span class="kn">ಶೈಕ್ಷಣಿಕ ವರ್ಷ</span>
           </label>
           <select id="yr">
-            <option value="">Select / ಆಯ್ಕೆ ಮಾಡಿ</option>
-            <option value="2024-25">2024-25</option>
-            <option value="2025-26">2025-26</option>
+            <option value="2026-27" selected>2026-27</option>
           </select>
           <span class="em">Required / ಅಗತ್ಯವಿದೆ</span>
         </div>
@@ -382,6 +371,7 @@
         <div class="cp"><input type="radio" name="course" value="BCA"  id="cBCA"  onchange="onCourse()"><label for="cBCA"> <span class="cpn">BCA</span>  <span class="cpf">Bachelor of Comp. Apps</span><span class="cpk">ಕಂಪ್ಯೂಟರ್ ಅಪ್ಲಿಕೇಷನ್ಸ್</span></label></div>
         <div class="cp"><input type="radio" name="course" value="BBA"  id="cBBA"  onchange="onCourse()"><label for="cBBA"> <span class="cpn">BBA</span>  <span class="cpf">Bachelor of Business Adm.</span><span class="cpk">ವ್ಯವಹಾರ ಆಡಳಿತ</span></label></div>
         <div class="cp"><input type="radio" name="course" value="MCOM" id="cMCOM" onchange="onCourse()"><label for="cMCOM"><span class="cpn">M.COM</span><span class="cpf">Master of Commerce</span><span class="cpk">ವಾಣಿಜ್ಯ ಸ್ನಾತಕೋತ್ತರ</span></label></div>
+        <div class="cp"><input type="radio" name="course" value="AEDP" id="cAEDP" onchange="onCourse()"><label for="cAEDP"><span class="cpn">AEDP</span><span class="cpf">Apprenticeship Embedded Degree</span><span class="cpk">ಅಪ್ರೆಂಟಿಸ್‌ಶಿಪ್ ಪದವಿ</span></label></div>
       </div>
       <div class="crs-err" id="crsErr">Please select your course. / ದಯವಿಟ್ಟು ನಿಮ್ಮ ಕೋರ್ಸ್ ಆಯ್ಕೆ ಮಾಡಿ.</div>
     </div>
@@ -526,21 +516,22 @@
 //  DATA
 // ════════════════════════════════════════════
 const FACULTY = {
-  "Business Management":["Sadashiv Huddar","Yallappa Hukkeri"],
-  "Chemistry":          ["Akshata Shedbal","Dr. Vinayak N. Vanjeri"],
-  "Commerce":           ["Mahantesh Ujjainimath","Manjunath S Hugar","Jyoti Kenchannavar","Jayashri Nagaral","Dr. Nagaratna Renakigoudar","Jinendr Banajawad"],
-  "Computer Science":   ["Ramachandra Chavan","Basavaraj Patil","Dr. Prasanna Kumar G"],
-  "Economics":          ["Ashok Vishnu Kurane","Kavita Ghatakamble","Dr. Harisha","Shamala M P","Shilpa Kareppa Ramannagol"],
-  "Education":          ["Madhusudhan T A M A","Nagappa Koti"],
-  "English":            ["Abhinandan Sulakude","Sanjay Sainappa Kamble","Deepa Gadivaddar","Pramod Munje","Anisa Dastagirsab Babuni","Dr. Shantinath Baloj"],
-  "Geography":          ["Raghavendra Gouri","Dr. Arun Oddin","Shivanand Navi","Kaveri Kodi"],
-  "History":            ["Shrishail Devaraddi","Siddappa Kuddannavar","Mallappa Salagare","Basappa Rayannavar","Dr. Shivanand Helavar","Kumar Gayakwad","Jadhav Shreekant","Mangalagowri K N","Padmavati V","Prof. Vilas N Kamble"],
-  "Kannada":            ["Parasappa Pujari","Dr. Mahantesh Shivashankar","Veerabhadrappa Maradi","Ramanna S Doddaningappagol","Vijay Ramu Kamble","Yallappa Koppad","Dr. Rajendra Gondhale","Ravasab Annappa Badiger","Undadi Santosh"],
-  "Mathematics":        ["Deepa Patil","Akshata Mamadapur","Appasab Mangond","Akshata Bhahusab Ajur","Surekha Devaraddi"],
+  "Business Management":["Yallappa Hukkeri", "Sadashiv Huddar", "Deepaka Parasappa Karadi", "Meena Kulkarni"],
+  "Chemistry":          ["Dr. Vinayak N. Vanjeri", "Akshata Shedbal", "Bhavani Guggari"],
+  "Commerce":           ["Jayashri Nagaral", "Jyoti Kenchannavar", "Praveen Palabavi", "Yasmin Gulab Mukkeri", "Parvati Immadi", "Ashwini Virupaksh Badiger", "Kumar Takatarao", "Jinendr Banajawad", "Nagaratna Renakigoudar"],
+  "Computer Science":   ["Basavaraj Patil", "Ramachandra Chavan", "Akashi Kamate", "Sangappa Saidapur", "Shraddha Mardane", "Suprita Babasab Kagawade", "Anusha Kulkarni", "Shweta Navi", "Dr. Prasanna Kumar G"],
+  "Economics":          ["Parashuram", "Manjula Hallolli", "Ashok Vishnu Kurane", "Dr. Appasab Madar", "Shivanand Matteppanavar", "Dr. Harisha B", "Shamala M P", "Dr. Shilpa Kareppa Ramannagol"],
+  "Education":          ["Nagappa Koti", "Jayashree K. Badiger"],
+  "English":            ["Sanjay Sainappa Kamble", "Abhinandan Sulakude", "Anisa Dastagirsab Nidoni", "Nirmala Shivappa Handi", "Vinod Bhairanatti", "Anand Appoji", "Dr. Imam Muneer Ahmad Kor", "Dr. Shantinath A Baloj"],
+  "Geography":          ["Dr. Arun Oddin", "Shivanand Navi", "Kaveri Kodi", "Raghavendra Gouri"],
+  "History":            ["Dr. Shivanand Helavar", "Shrishail Devaraddi", "Siddappa Kuddannavar", "Umesh Sollapure", "Vijayakumar Badiger", "Mallappa Salagare", "Mangalagowri K N", "Shri Vilas N. Kamble", "Dr. Basayya Irayya Mathapati", "Padmavathi V"],
+  "Kannada":            ["Dr. Rajendra Gondhale", "Padmashree M", "Shekhar Kamble", "Ramanna Sidarayappa Dodda", "Ravasab Annappa Badiger", "Vijay Ramu Kamble", "Parasappa Pujari", "Subhash Walikar", "Undadi Santhosh"],
+  "Library Science":    ["Supriya M Kamble"],
+  "Mathematics":        ["Akshata Mamadapur", "Savitri Gulannavar", "Surekha Devaraddi"],
   "Physical Education": ["Ramesh Bilembagi"],
-  "Physics":            ["Shivanand B Hosamani","Drakshayani S Teli","Mallikarjun Patil"],
-  "Political Science":  ["Dr. Mallappa Channapur","Nachiket Nooli","Nagappa Chikkatti","Basagonda Mugganawar","Shivanand Kamble","Raju Bajantri","Patil Somaling Appaso","Suresh Takatarao"],
-  "Sociology":          ["Vidyawati Badiger","Mahalaxmi Gouda"]
+  "Physics":            ["Toufik Dhalayat", "Mallikarjun Patil", "Shivanand B Hosamani", "Drakshayani S Teli"],
+  "Political Science":  ["Appanna Mali", "Nagappa Chikkatti", "Nachiket Nooli", "Dr. Mallappa Channapur", "Basagonda Mugganawar", "Raju Bajantri", "Patil Somaling Appaso", "Dr. Suresh Takatarao"],
+  "Sociology":          ["Vidyawati Badiger", "Mahalaxmi Gouda"]
 };
 
 // Kannada translations for departments
@@ -555,6 +546,7 @@ const DEPT_KN = {
   "Geography":           "ಭೂಗೋಳಶಾಸ್ತ್ರ",
   "History":             "ಇತಿಹಾಸ",
   "Kannada":             "ಕನ್ನಡ",
+  "Library Science":     "ಗ್ರಂಥಾಲಯ ವಿಜ್ಞಾನ",
   "Mathematics":         "ಗಣಿತ",
   "Physical Education":  "ದೈಹಿಕ ಶಿಕ್ಷಣ",
   "Physics":             "ಭೌತಶಾಸ್ತ್ರ",
@@ -585,14 +577,27 @@ let selCourse = null;
 let selDepts  = [];
 let reqVals   = [];
 
+// Professional courses: no subject combination; the stream's own department is shown as "General"
+const STREAM_DEPT = {
+  "BCOM": "Commerce",
+  "MCOM": "Commerce",
+  "AEDP": "Commerce",
+  "BBA":  "Business Management",
+  "BCA":  "Computer Science"
+};
+
+function streamDept() { return STREAM_DEPT[selCourse] || null; }
+
+// BA / BSC: always 3 compulsory subjects (all semesters). Professional courses: none (General instead).
 function getCompCount() {
-  const sem = document.getElementById('sem')?.value;
-  return (sem === 'V' || sem === 'VI') ? 2 : 3;
+  return streamDept() ? 0 : 3;
 }
 
 function deptOptions(placeholder) {
   let html = `<option value="">${placeholder}</option>`;
+  const exclude = streamDept();
   ALL_DEPTS.forEach(d => {
+    if (d === exclude) return;
     const kn = DEPT_KN[d] ? ` / ${DEPT_KN[d]}` : '';
     html += `<option value="${d}">${d}${kn}</option>`;
   });
@@ -613,19 +618,35 @@ function onCourse() {
   document.getElementById('crsErr').classList.remove('show');
 
   const compCount = getCompCount();
-
+  const sd = streamDept();
   const desc = document.getElementById('subDesc');
-  if (desc) {
-    desc.innerHTML = `Select <strong>${compCount} compulsory subject${compCount > 1 ? 's' : ''}</strong> you are studying. You may also add up to <strong>4 optional subjects</strong>.<br/>
-      <span style="color:#92652a;font-size:11px;">ನೀವು ಓದುತ್ತಿರುವ <strong>${compCount} ಕಡ್ಡಾಯ ವಿಷಯಗಳನ್ನು</strong> ಆಯ್ಕೆ ಮಾಡಿ. ಹೆಚ್ಚುವರಿಯಾಗಿ <strong>೪ ಐಚ್ಛಿಕ ವಿಷಯಗಳನ್ನು</strong> ಸೇರಿಸಬಹುದು.</span>`;
-  }
-
   const titleEl = document.getElementById('compTitle');
-  if (titleEl) titleEl.innerHTML = `Compulsory Subjects — Select ${compCount}<span class="kn">ಕಡ್ಡಾಯ ವಿಷಯಗಳು — ${compCount} ಆಯ್ಕೆ ಮಾಡಿ</span>`;
-
   const hintEl = document.getElementById('compHint');
-  if (hintEl) hintEl.innerHTML = `All ${compCount} must be filled. Teachers from these departments will be shown for feedback.
-    <span class="kn">ಎಲ್ಲ ${compCount} ಭರ್ತಿ ಮಾಡಬೇಕು. ಈ ವಿಭಾಗಗಳ ಶಿಕ್ಷಕರನ್ನು ಮೌಲ್ಯಮಾಪನಕ್ಕೆ ತೋರಿಸಲಾಗುತ್ತದೆ.</span>`;
+  const badge = document.querySelector('.grp-badge.req');
+
+  if (sd) {
+    const sdKn = DEPT_KN[sd] || '';
+    desc.innerHTML = `Your <strong>General</strong> subject teachers (<strong>${sd}</strong>) are included automatically. You may also add up to <strong>4 optional subjects</strong>.<br/>
+      <span style="color:#92652a;font-size:11px;">ನಿಮ್ಮ <strong>ಸಾಮಾನ್ಯ</strong> ವಿಷಯದ (<strong>${sdKn}</strong>) ಶಿಕ್ಷಕರನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಸೇರಿಸಲಾಗಿದೆ. ಹೆಚ್ಚುವರಿಯಾಗಿ <strong>೪ ಐಚ್ಛಿಕ ವಿಷಯಗಳನ್ನು</strong> ಸೇರಿಸಬಹುದು.</span>`;
+    if (badge) badge.textContent = '⚑ General';
+    titleEl.innerHTML = `General — ${sd}<span class="kn">ಸಾಮಾನ್ಯ — ${sdKn}</span>`;
+    hintEl.innerHTML = `No selection needed. Teachers of your stream will be shown for feedback.
+      <span class="kn">ಆಯ್ಕೆ ಅಗತ್ಯವಿಲ್ಲ. ನಿಮ್ಮ ವಿಭಾಗದ ಶಿಕ್ಷಕರನ್ನು ಮೌಲ್ಯಮಾಪನಕ್ಕೆ ತೋರಿಸಲಾಗುತ್ತದೆ.</span>`;
+    document.getElementById('reqRows').innerHTML = `
+      <div class="sub-row">
+        <div class="sub-num rn">✓</div>
+        <div class="sub-col">
+          <div class="sub-select chosen" style="display:flex;align-items:center;cursor:default;">General: ${sd}${sdKn ? ' / ' + sdKn : ''}</div>
+        </div>
+      </div>`;
+  } else {
+    desc.innerHTML = `Select <strong>${compCount} compulsory subjects</strong> you are studying. You may also add up to <strong>4 optional subjects</strong>.<br/>
+      <span style="color:#92652a;font-size:11px;">ನೀವು ಓದುತ್ತಿರುವ <strong>೩ ಕಡ್ಡಾಯ ವಿಷಯಗಳನ್ನು</strong> ಆಯ್ಕೆ ಮಾಡಿ. ಹೆಚ್ಚುವರಿಯಾಗಿ <strong>೪ ಐಚ್ಛಿಕ ವಿಷಯಗಳನ್ನು</strong> ಸೇರಿಸಬಹುದು.</span>`;
+    if (badge) badge.textContent = '⚑ Compulsory';
+    titleEl.innerHTML = `Compulsory Subjects — Select ${compCount}<span class="kn">ಕಡ್ಡಾಯ ವಿಷಯಗಳು — ೩ ಆಯ್ಕೆ ಮಾಡಿ</span>`;
+    hintEl.innerHTML = `All ${compCount} must be filled. Teachers from these departments will be shown for feedback.
+      <span class="kn">ಎಲ್ಲ ೩ ಭರ್ತಿ ಮಾಡಬೇಕು. ಈ ವಿಭಾಗಗಳ ಶಿಕ್ಷಕರನ್ನು ಮೌಲ್ಯಮಾಪನಕ್ಕೆ ತೋರಿಸಲಾಗುತ್ತದೆ.</span>`;
+  }
 
   let rHTML = '';
   for (let i = 0; i < compCount; i++) {
@@ -640,7 +661,7 @@ function onCourse() {
         </div>
       </div>`;
   }
-  document.getElementById('reqRows').innerHTML = rHTML;
+  if (!sd) document.getElementById('reqRows').innerHTML = rHTML;
 
   let oHTML = '';
   for (let i = 0; i < 4; i++) {
@@ -683,12 +704,12 @@ function syncDups() {
 }
 
 function updatePg1Prog() {
-  const sf = ['sid','gen','sem','yr'].filter(id => document.getElementById(id)?.value?.trim()).length;
+  const sf = ['gen','sem','yr'].filter(id => document.getElementById(id)?.value?.trim()).length;
   const cf = selCourse ? 1 : 0;
   const compCount = getCompCount();
   const rf = [...document.querySelectorAll('#reqRows .sub-select')].filter(s => s.value).length;
   const of = [...document.querySelectorAll('#optRows .sub-select')].filter(s => s.value).length;
-  const pct = Math.round((sf + cf + rf + of) / (4 + 1 + compCount + 4) * 50);
+  const pct = Math.round((sf + cf + rf + of) / (3 + 1 + compCount + 4) * 50);
   document.getElementById('pgBar').style.width = pct + '%';
   document.getElementById('pgLbl').textContent = pct + '%';
 }
@@ -704,7 +725,7 @@ document.getElementById('sem').addEventListener('change', () => {
 function proceed() {
   let ok = true;
 
-  [['sid','w-sid'],['gen','w-gen'],['sem','w-sem'],['yr','w-yr']].forEach(([fid,wid]) => {
+  [['gen','w-gen'],['sem','w-sem'],['yr','w-yr']].forEach(([fid,wid]) => {
     const el = document.getElementById(fid), wr = document.getElementById(wid);
     el.value.trim() ? wr.classList.remove('inv') : (wr.classList.add('inv'), ok = false);
   });
@@ -731,7 +752,9 @@ function proceed() {
   }
 
   const compCount = getCompCount();
-  reqVals = [...Array(compCount)].map((_, i) => document.getElementById(`req${i}`)?.value).filter(Boolean);
+  reqVals = streamDept()
+    ? [streamDept()]
+    : [...Array(compCount)].map((_, i) => document.getElementById(`req${i}`)?.value).filter(Boolean);
   const optVals = [...Array(4)].map((_, i) => document.getElementById(`opt${i}`)?.value).filter(Boolean);
   selDepts = [...new Set([...reqVals, ...optVals])];
 
@@ -754,7 +777,7 @@ function buildPage2() {
   document.getElementById('summChips').innerHTML = selDepts.map((d, i) => {
     const isReq = reqVals.includes(d);
     return `<div class="schip ${isReq ? 'req-chip' : 'opt-chip'}">
-      <div class="cn">${i + 1}</div>${d}
+      <div class="cn">${i + 1}</div>${(isReq && streamDept()) ? 'General: ' + d : d}
     </div>`;
   }).join('');
 
@@ -916,7 +939,6 @@ document.getElementById('form').addEventListener('submit', async function(e) {
   btn.innerHTML = 'Submitting… <span class="kn">ಸಲ್ಲಿಸಲಾಗುತ್ತಿದೆ…</span>';
 
   const payload = {
-    studentId:    document.getElementById('sid').value.trim(),
     gender:       document.getElementById('gen').value,
     course:       selCourse,
     semester:     document.getElementById('sem').value,
