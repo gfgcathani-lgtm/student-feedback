@@ -359,6 +359,15 @@
       </div>
       <div class="fg">
 
+        <div class="f" id="w-sid">
+          <label>
+            Student ID <span class="r">*</span>
+            <span class="kn">ವಿದ್ಯಾರ್ಥಿ ಐಡಿ</span>
+          </label>
+          <input type="text" id="sid" placeholder="e.g. SMG36645" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="30" oninput="this.value=this.value.toUpperCase().replace(/\s+/g,'')"/>
+          <span class="em">Required / ಅಗತ್ಯವಿದೆ</span>
+        </div>
+
         <div class="f" id="w-gen">
           <label>
             Gender <span class="r">*</span>
@@ -749,12 +758,12 @@ function syncDups() {
 }
 
 function updatePg1Prog() {
-  const sf = ['gen','sem','yr'].filter(id => document.getElementById(id)?.value?.trim()).length;
+  const sf = ['sid','gen','sem','yr'].filter(id => document.getElementById(id)?.value?.trim()).length;
   const cf = selCourse ? 1 : 0;
   const compCount = getCompCount();
   const rf = [...document.querySelectorAll('#reqRows .sub-select')].filter(s => s.value).length;
   const of = [...document.querySelectorAll('#optRows .sub-select')].filter(s => s.value).length;
-  const pct = Math.round((sf + cf + rf + of) / (3 + 1 + compCount + 4) * 50);
+  const pct = Math.round((sf + cf + rf + of) / (4 + 1 + compCount + 4) * 50);
   document.getElementById('pgBar').style.width = pct + '%';
   document.getElementById('pgLbl').textContent = pct + '%';
 }
@@ -770,7 +779,7 @@ document.getElementById('sem').addEventListener('change', () => {
 function proceed() {
   let ok = true;
 
-  [['gen','w-gen'],['sem','w-sem'],['yr','w-yr']].forEach(([fid,wid]) => {
+  [['sid','w-sid'],['gen','w-gen'],['sem','w-sem'],['yr','w-yr']].forEach(([fid,wid]) => {
     const el = document.getElementById(fid), wr = document.getElementById(wid);
     el.value.trim() ? wr.classList.remove('inv') : (wr.classList.add('inv'), ok = false);
   });
@@ -985,6 +994,7 @@ document.getElementById('form').addEventListener('submit', async function(e) {
   btn.innerHTML = 'Submitting… <span class="kn">ಸಲ್ಲಿಸಲಾಗುತ್ತಿದೆ…</span>';
 
   const payload = {
+    studentId:    document.getElementById('sid').value.trim().toUpperCase(),
     gender:       document.getElementById('gen').value,
     course:       selCourse,
     semester:     document.getElementById('sem').value,
@@ -1014,7 +1024,17 @@ document.getElementById('form').addEventListener('submit', async function(e) {
   try {
     const formData = new FormData();
     formData.append("data", JSON.stringify(payload));
-    await fetch(APPS_SCRIPT_URL, { method: "POST", body: formData });
+    const res = await fetch(APPS_SCRIPT_URL, { method: "POST", body: formData });
+    let result = null;
+    try { result = await res.json(); } catch (_) { /* older script / unreadable reply: treat as success */ }
+
+    if (result && result.status === "duplicate") {
+      msg.className = "err";
+      msg.innerHTML = "⚠️ Feedback has already been submitted with this Student ID (" + payload.studentId + ").<br/><span style='font-size:12px;font-weight:500'>ಈ ವಿದ್ಯಾರ್ಥಿ ಐಡಿಯಿಂದ ಈಗಾಗಲೇ ಪ್ರತಿಕ್ರಿಯೆ ಸಲ್ಲಿಸಲಾಗಿದೆ.</span>";
+      btn.disabled  = false;
+      btn.innerHTML = '✦ Submit All Feedback <span class="kn">ಎಲ್ಲ ಪ್ರತಿಕ್ರಿಯೆ ಸಲ್ಲಿಸಿ</span>';
+      return;
+    }
 
     msg.className   = "ok";
     msg.innerHTML   = "✅ Thank you! Your feedback has been submitted.<br/><span style='font-size:12px;font-weight:500'>ಧನ್ಯವಾದಗಳು! ನಿಮ್ಮ ಪ್ರತಿಕ್ರಿಯೆ ಸಲ್ಲಿಸಲಾಗಿದೆ.</span>";
